@@ -55,6 +55,8 @@ https://github.com/skychen527/zk-domestic-store/archive/refs/heads/main.zip
 
 欢迎内容会同时引导客户聊产品或聊日常保健需求：熟悉产品的客户直接查询并购买；游客先描述需求，再获得图文组合建议，经用户选择后进入下单流程。健康描述只做日常保健指引，不做疾病诊断。
 
+做健康分析或组合推荐时，Agent 会先读取实时商品，再调用 `getProductKnowledge`，综合批准说明、原料科普、品质工艺、使用场景、禁忌和实时优惠。原料知识仅用于解释配方，不转化为疾病治疗或预防宣称。
+
 ## 使用示例
 
 产品查询：
@@ -87,6 +89,7 @@ AI 必须先预览订单并取得用户明确确认，才能创建订单。用�
 
 - `searchProducts`：搜索产品与实时销售信息。
 - `getProductDetail`：获取完整产品档案。
+- `getProductKnowledge`：获取批准说明、原料科普、品质工艺和推荐依据。
 - `getCurrentPromotions`：查询当期优惠活动。
 - `listVouchers`：查询当前可领抵用券。
 - `claimVoucher`：领取指定抵用券。
@@ -103,6 +106,6 @@ AI 必须先预览订单并取得用户明确确认，才能创建订单。用�
 
 ## 版本
 
-当前版本：`0.4.1`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
+当前版本：`0.5.0`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
 
 License：MIT-0，见 `LICENSE`。
