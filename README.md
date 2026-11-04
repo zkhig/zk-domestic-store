@@ -47,7 +47,7 @@ https://github.com/skychen527/zk-domestic-store/archive/refs/heads/main.zip
 
 正式 MCP 为 `https://open.zkjk.net/mcp`，登录页为 `https://open.zkjk.net/login`。
 
-首次需要身份的操作遇到未授权响应时，AI 会提供登录链接。用户在登录页输入手机号和短信验证码，完成授权后返回 AI 继续。支持 OAuth 的客户端通过一次性授权码和 PKCE 自动完成鉴权，其他客户端使用登录链接完成一次性绑定。
+首次需要身份的操作遇到未授权响应时，AI 会提供登录链接。用户在登录页输入手机号和短信验证码，完成授权后返回 AI 继续。支持 OAuth 的客户端通过一次性授权码和 PKCE 自动完成鉴权；其他客户端通过 `pollUrl` 自动取得一次性绑定结果。
 
 访问令牌由服务端自动签发和刷新，用户不需要复制、粘贴或保存 Token。示例配置见 `mcp-config.example.json`，不要把真实 Token 写入本仓库、公开聊天或公开配置。
 
