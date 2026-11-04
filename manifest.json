@@ -1,0 +1,11 @@
+{
+  "name": "zk-domestic-store",
+  "displayName": "中科健康 AI 旗舰店",
+  "version": "0.1.0",
+  "archiveName": "zk-domestic-store-skill",
+  "mcp": {
+    "type": "streamableHttp",
+    "url": "https://open.zkjk.net/mcp",
+    "tokenEnv": "ZHONGKE_MCP_TOKEN"
+  }
+}

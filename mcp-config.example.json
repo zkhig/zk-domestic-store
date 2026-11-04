@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "zk-domestic-store": {
+      "type": "streamableHttp",
+      "url": "https://open.zkjk.net/mcp",
+      "headers": {
+        "Authorization": "Bearer ${ZHONGKE_MCP_TOKEN}"
+      }
+    }
+  }
+}
