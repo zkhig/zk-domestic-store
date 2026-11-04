@@ -9,9 +9,9 @@
 - 支持 Agent Skills 的 AI 工具。
 - 支持 Streamable HTTP MCP 的客户端。
 - 可访问的正式 MCP：`https://open.zkjk.net/mcp`。
-- 旗舰店为每位顾客签发的独立 `ZHONGKE_MCP_TOKEN`。
+- 本人可接收短信验证码的手机号。
 
-**只安装 Skill 不会自动获得商品或下单数据；还必须配置可访问的 MCP 和有效顾客 Token。**
+**只安装 Skill 不会自动获得商品或下单数据；还需要可访问的 MCP。首次涉及领券、订单或支付时，按 AI 提示完成手机号授权即可，无需手工配置 Token。**
 
 ## 从 GitHub 安装
 
@@ -34,7 +34,7 @@ openclaw skills install git:skychen527/zk-domestic-store
 ```text
 请从 GitHub 下载安装中科健康 AI 旗舰店 Skill：
 https://github.com/skychen527/zk-domestic-store
-安装后，请引导我配置 ZHONGKE_MCP_TOKEN。
+安装后，请引导我完成手机号授权。
 ```
 
 也可以下载 GitHub 自动生成的源码 ZIP，在支持 Skills 的客户端中导入：
@@ -43,23 +43,13 @@ https://github.com/skychen527/zk-domestic-store
 https://github.com/skychen527/zk-domestic-store/archive/refs/heads/main.zip
 ```
 
-## 配置 MCP
+## 手机号授权与 MCP
 
-```json
-{
-  "mcpServers": {
-    "zk-domestic-store": {
-      "type": "streamableHttp",
-      "url": "https://open.zkjk.net/mcp",
-      "headers": {
-        "Authorization": "Bearer ${ZHONGKE_MCP_TOKEN}"
-      }
-    }
-  }
-}
-```
+正式 MCP 为 `https://open.zkjk.net/mcp`，登录页为 `https://open.zkjk.net/login`。
 
-也可以使用仓库中的 `mcp-config.example.json`。不要把真实 Token 写入本仓库、公开聊天或公开配置。
+首次需要身份的操作遇到未授权响应时，AI 会提供登录链接。用户在登录页输入手机号和短信验证码，完成授权后返回 AI 继续。支持 OAuth 的客户端通过一次性授权码和 PKCE 自动完成鉴权，其他客户端使用登录链接完成一次性绑定。
+
+访问令牌由服务端自动签发和刷新，用户不需要复制、粘贴或保存 Token。示例配置见 `mcp-config.example.json`，不要把真实 Token 写入本仓库、公开聊天或公开配置。
 
 ## 使用示例
 
@@ -109,6 +99,6 @@ AI 必须先预览订单并取得用户明确确认，才能创建订单。用�
 
 ## 版本
 
-当前版本：`0.1.0`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
+当前版本：`0.2.0`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
 
 License：MIT-0，见 `LICENSE`。

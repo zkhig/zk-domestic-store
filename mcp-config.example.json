@@ -3,8 +3,10 @@
     "zk-domestic-store": {
       "type": "streamableHttp",
       "url": "https://open.zkjk.net/mcp",
-      "headers": {
-        "Authorization": "Bearer ${ZHONGKE_MCP_TOKEN}"
+      "loginUrl": "https://open.zkjk.net/login",
+      "authorization": {
+        "flow": "oauth2-authorization-code-pkce",
+        "phoneVerification": true
       }
     }
   }

@@ -14,7 +14,7 @@ keywords:
 packageType: instruction-skill
 instructionOnly: true
 metadata:
-  version: 0.1.0
+  version: 0.2.0
   openclaw:
     requiredMcp:
       - zk-domestic-store
@@ -24,29 +24,17 @@ metadata:
 
 # 中科健康 AI 旗舰店
 
-## 连接配置
+## 连接与手机号授权
 
-优先使用名为 `zk-domestic-store` 的 Streamable HTTP MCP：
+优先使用名为 `zk-domestic-store` 的 Streamable HTTP MCP：`https://open.zkjk.net/mcp`。本地联调可使用 `${ZHONGKE_MCP_URL}` 覆盖。
 
-```json
-{
-  "mcpServers": {
-    "zk-domestic-store": {
-      "type": "streamableHttp",
-      "url": "https://open.zkjk.net/mcp",
-      "headers": {
-        "Authorization": "Bearer ${ZHONGKE_MCP_TOKEN}"
-      }
-    }
-  }
-}
-```
-
-- 正式地址：`https://open.zkjk.net/mcp`。本地联调可使用 `${ZHONGKE_MCP_URL}` 覆盖。
-- 从环境变量 `ZHONGKE_MCP_TOKEN` 读取顾客 Token。未获用户明确同意，不写入文件或长期保存。
+- 商品资料、价格、活动和可购买状态可以直接查询；领券、订单、支付等顾客操作需要完成手机号授权。
+- 首次需要身份的操作遇到 `CUSTOMER_AUTH_REQUIRED` 时，向用户展示 `loginUrl`；正式登录页为 `https://open.zkjk.net/login`。
+- 引导用户在登录页输入手机号和短信验证码，完成授权后返回当前对话继续，不要求用户复制、粘贴或保存 Token。
+- 支持 OAuth 的客户端使用一次性授权码和 PKCE 自动完成鉴权；其他客户端可使用登录链接完成一次性绑定。
 - 不输出、复述或记录 Authorization、完整 Token、管理 Token、完整手机号或详细地址。
 - 首次调用或参数不确定时，先读取 MCP 工具 descriptor/schema，以实际 Schema 为准。
-- 没有有效 Token 时，引导用户向旗舰店获取个人 Token 并完成配置；管理 Token 不能替代顾客 Token。
+- 若登录状态失效，再次打开登录页完成验证，不重复创建订单或抵用券领取请求。
 
 ## 强制规则
 
