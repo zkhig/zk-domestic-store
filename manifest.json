@@ -1,7 +1,7 @@
 {
   "name": "zk-domestic-store",
   "displayName": "中科健康 AI 旗舰店",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "archiveName": "zk-domestic-store-skill",
   "mcp": {
     "type": "streamableHttp",

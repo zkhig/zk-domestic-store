@@ -47,9 +47,14 @@ https://github.com/skychen527/zk-domestic-store/archive/refs/heads/main.zip
 
 正式 MCP 为 `https://open.zkjk.net/mcp`，登录页为 `https://open.zkjk.net/login`。
 
-首次需要身份的操作遇到未授权响应时，AI 会提供登录链接。用户在登录页输入手机号和短信验证码，完成授权后返回 AI 继续。支持 OAuth 的客户端通过一次性授权码和 PKCE 自动完成鉴权；其他客户端通过 `pollUrl` 自动取得一次性绑定结果。
+首次需要身份的操作遇到未授权响应时，AI 会提供登录链接和二维码。用户用手机扫码或打开链接，本人接收并输入短信验证码，Agent 再通过 `pollUrl` 获取授权结果。支持 OAuth 的客户端通过一次性授权码和 PKCE 自动完成鉴权；其他客户端通过扫码登录和轮询完成一次性绑定。
 
 访问令牌由服务端自动签发和刷新，用户不需要复制、粘贴或保存 Token。示例配置见 `mcp-config.example.json`，不要把真实 Token 写入本仓库、公开聊天或公开配置。
+
+## 两种购物入口
+
+- **熟悉产品的客户直接购买**：直接查询产品、价格和活动，授权后领券、预览、确认和支付。
+- **游客对话式购物**：先了解日常保健需求，再返回产品图片、规格、批准功能、适宜人群和价格组合，经用户选择后进入下单流程。健康描述只做日常保健指引，不做疾病诊断。
 
 ## 使用示例
 
@@ -99,6 +104,6 @@ AI 必须先预览订单并取得用户明确确认，才能创建订单。用�
 
 ## 版本
 
-当前版本：`0.2.0`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
+当前版本：`0.3.0`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
 
 License：MIT-0，见 `LICENSE`。

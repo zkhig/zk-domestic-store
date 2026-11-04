@@ -14,7 +14,7 @@ keywords:
 packageType: instruction-skill
 instructionOnly: true
 metadata:
-  version: 0.2.0
+  version: 0.3.0
   openclaw:
     requiredMcp:
       - zk-domestic-store
@@ -29,12 +29,32 @@ metadata:
 优先使用名为 `zk-domestic-store` 的 Streamable HTTP MCP：`https://open.zkjk.net/mcp`。本地联调可使用 `${ZHONGKE_MCP_URL}` 覆盖。
 
 - 商品资料、价格、活动和可购买状态可以直接查询；领券、订单、支付等顾客操作需要完成手机号授权。
-- 首次需要身份的操作遇到 `CUSTOMER_AUTH_REQUIRED` 时，向用户展示 `loginUrl`；正式登录页为 `https://open.zkjk.net/login`。
-- 引导用户在登录页输入手机号和短信验证码，完成授权后返回当前对话继续，不要求用户复制、粘贴或保存 Token。
-- 支持 OAuth 的客户端使用一次性授权码和 PKCE 自动完成鉴权；其他客户端使用 `loginUrl` 完成手机号验证，并通过 `pollUrl` 自动取得一次性绑定结果。
+- 首次需要身份的操作遇到 `CUSTOMER_AUTH_REQUIRED` 时，向用户展示 `loginUrl` 和 `qrCodeUrl`；正式登录页为 `https://open.zkjk.net/login`。
+- 优先用 Markdown 图片展示 `qrCodeUrl` 的二维码，同时提供完整可点击的 `loginUrl`。用户用手机扫码或打开链接，本人接收并输入短信验证码，Agent 再通过 `pollUrl` 获取授权结果。
+- 支持 OAuth 的客户端使用一次性授权码和 PKCE 自动完成鉴权；其他客户端使用扫码登录和轮询完成一次性绑定，不要求用户复制、粘贴或保存 Token。
 - 不输出、复述或记录 Authorization、完整 Token、管理 Token、完整手机号或详细地址。
 - 首次调用或参数不确定时，先读取 MCP 工具 descriptor/schema，以实际 Schema 为准。
 - 若登录状态失效，再次打开登录页完成验证，不重复创建订单或抵用券领取请求。
+
+## 两种购物入口
+
+### 入口一：熟悉产品的客户直接购买
+
+1. 客户直接询问产品时，用 `searchProducts`、`getProductDetail` 核对图片、规格、适宜人群、价格、折扣和库存，并用 `getCurrentPromotions` 返回当期优惠。
+2. 直接给出当前可购买建议，不做不必要的健康问诊。
+3. 客户决定购买后，完成手机号授权，查询并按客户要求领取抵用券，再进入预览、确认和支付流程。
+
+### 入口二：游客对话式购物
+
+1. 先了解日常保健需求，例如日常免疫、作息、疲劳、饮食或营养补充，并询问孕期／哺乳期、正在服药、慢性疾病和过敏等必要安全信息。
+2. 不做疾病诊断，不评价异常指标，不把产品描述成治疗方案。用户描述疾病、持续不适或异常症状时，先建议就医，再决定是否仅提供一般产品资料。
+3. 用 MCP 查询真实产品和活动，返回一款或多款产品的图文组合。每个产品卡片必须包含：
+   - 官网图片 `imageUrl`、标准品名和 `sourceUrl`。
+   - 规格、批准文号、注册或备案保健功能。
+   - 适宜与不适宜人群、实时价格、折扣和选择理由。
+   - 使用注意事项及“保健食品不是药物，不能代替药物治疗疾病”。
+4. 组合仅是日常选购建议，不宣传协同治疗、保证效果或替代药物。让用户主动选择产品，不替用户默认决定。
+5. 展示当期活动和可领抵用券，引导客户完成手机号授权并领取，随后进入订单预览、确认和支付流程。
 
 ## 强制规则
 
@@ -100,7 +120,7 @@ metadata:
 
 ## 订单查询与取消
 
-- 用 `queryOrder` 查询本人订单；展示商品、金额、订单和支付状态，收货信息保持掩码。
+- 用 `queryOrder` 查询本人订单；展示商品、金额、订单和支付状态，收货信息保持掩码。发货后同时展示 `shippingCourier`、`shippingTrackingNumber` 和 `shippedAt`，用自然语言通知客户。
 - 用 `queryPayment` 查询支付状态及支付链接。
 - 用户明确要求取消待支付订单后，调用 `cancelOrder`。成功后说明库存和抵用券按系统规则返还。
 - 已支付、已取消或不存在的订单不重复取消，引导人工处理退款或售后。
