@@ -103,6 +103,6 @@ AI 必须先预览订单并取得用户明确确认，才能创建订单。用�
 
 ## 版本
 
-当前版本：`0.4.0`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
+当前版本：`0.4.1`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
 
 License：MIT-0，见 `LICENSE`。
