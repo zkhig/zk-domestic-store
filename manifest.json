@@ -1,12 +1,12 @@
 {
   "name": "zk-domestic-store",
   "displayName": "中科健康 AI 旗舰店",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "archiveName": "zk-domestic-store-skill",
   "mcp": {
     "type": "streamableHttp",
     "url": "https://open.zkjk.net/mcp",
     "loginUrl": "https://open.zkjk.net/login",
-    "authorization": "phone-sms-oauth"
+    "authorization": "phone-sms-chat"
   }
 }
