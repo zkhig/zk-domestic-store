@@ -18,13 +18,13 @@
 ### 使用 skills CLI
 
 ```bash
-npx skills add skychen527/zk-domestic-store
+npx skills add zkhig/zk-domestic-store
 ```
 
 ### OpenClaw
 
 ```bash
-openclaw skills install git:skychen527/zk-domestic-store
+openclaw skills install git:zkhig/zk-domestic-store
 ```
 
 ### 千问办公、Kimi Code 或兼容 Agent
@@ -33,14 +33,14 @@ openclaw skills install git:skychen527/zk-domestic-store
 
 ```text
 请从 GitHub 下载安装中科健康 AI 旗舰店 Skill：
-https://github.com/skychen527/zk-domestic-store
+https://github.com/zkhig/zk-domestic-store
 安装后，请引导我完成手机号授权。
 ```
 
 也可以下载 GitHub 自动生成的源码 ZIP，在支持 Skills 的客户端中导入：
 
 ```text
-https://github.com/skychen527/zk-domestic-store/archive/refs/heads/main.zip
+https://github.com/zkhig/zk-domestic-store/archive/refs/heads/main.zip
 ```
 
 ## 手机号授权与 MCP
