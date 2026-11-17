@@ -64,6 +64,14 @@ https://github.com/zkhig/zk-domestic-store/archive/refs/heads/main.zip
 
 健康描述只做日常保健指引，不做疾病诊断；疾病、持续不适或异常症状先建议就医。客户需求与批准功能不匹配时明确不推荐，不为了成交强行组合。
 
+## 默认收货地址
+
+首次在对话中提供的完整收货地址会在订单预览成功后自动保存为默认地址。后续订单未提供新地址时，`previewOrder` 可省略 `receiver`，自动使用默认地址。
+
+每次预览都会返回 `shippingAddress` 和 `shippingNotice`。Agent 必须向客户说明本次完整收货信息；使用默认地址时提醒：“本次订单将发往默认地址：……。如需更改，请告诉我新的收货地址。”客户提供新地址但未明确授权时，只用于本次订单，不更改默认地址。
+
+地址簿最多保存 5 条，支持查询、保存、设默认和删除；更改或删除均需客户明确授权。
+
 ## 使用示例
 
 产品查询：
@@ -107,7 +115,11 @@ AI 必须先预览订单并取得用户明确确认，才能创建订单。用�
 - `listVouchers`：查询当前可领抵用券。
 - `claimVoucher`：领取指定抵用券。
 - `listMyVouchers`：查询本人抵用券。
-- `previewOrder`：计算最终订单并获取一次性预览 Token。
+- `listAddresses`：查询本人地址及默认地址。
+- `saveAddress`：保存地址，首条自动设为默认。
+- `setDefaultAddress`：将已保存地址设为默认。
+- `deleteAddress`：删除指定地址。
+- `previewOrder`：计算最终订单并获取一次性预览 Token；省略地址时使用默认地址。
 - `createOrder`：确认后创建待支付订单和支付参数。
 - `queryOrder`：查询本人订单。
 - `cancelOrder`：取消待支付订单。
@@ -119,6 +131,6 @@ AI 必须先预览订单并取得用户明确确认，才能创建订单。用�
 
 ## 版本
 
-当前版本：`0.5.1`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
+当前版本：`0.6.0`，见 `manifest.json`。Skill 的正式 MCP 地址为 `https://open.zkjk.net/mcp`；域名、SSL 和正式支付能力以实际部署状态为准。
 
 License：MIT-0，见 `LICENSE`。

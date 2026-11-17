@@ -14,7 +14,7 @@ keywords:
 packageType: instruction-skill
 instructionOnly: true
 metadata:
-  version: 0.5.1
+  version: 0.6.0
   openclaw:
     requiredMcp:
       - zk-domestic-store
@@ -63,10 +63,10 @@ metadata:
 1. 需要身份的操作遇到 `CUSTOMER_AUTH_REQUIRED` 时，直接询问客户手机号并调用 `startPhoneLogin`，不要求扫码或打开网页。
 2. 告知客户验证码将由本人手机接收。仅 Mock 环境可展示返回的测试验证码，生产环境不得展示或编造验证码。
 3. 客户在对话中输入验证码后，调用 `completePhoneLogin`，将返回的 `mcpAuthorization` 用于后续 MCP 请求。不得向客户展示访问令牌，不要写入公开聊天或代码仓库。
-4. 验证码错误或过期时，按返回提示重新验证或重新发送，遵守 60 秒重发限制。
+4. 验证码错误或过期时，按返回提示重新验证或重新发送，遵守 120 秒重发限制；同一手机号每天最多 3 次，超限后引导客户次日再试。
 5. 登录状态失效时再次验证，不重复创建订单或抵用券领取请求。支持 OAuth 的平台也可使用授权码和 PKCE 自动完成鉴权。
 6. 仅在客户端不支持对话登录时，提供备用登录页 `https://open.zkjk.net/login`，不要求默认扫码。
-- 不输出、复述或记录 Authorization、完整 Token、管理 Token、完整手机号或详细地址。
+- 不输出、复述或记录 Authorization、完整 Token 或管理 Token。除订单预览与确认必须展示本次完整收货信息外，不在其他对话、日志或公开内容中展示完整手机号和详细地址。
 - 首次调用或参数不确定时，先读取 MCP 工具 descriptor/schema，以实际 Schema 为准。
 
 ## 强制规则
@@ -102,10 +102,19 @@ metadata:
 - 用 `listMyVouchers` 查询本人抵用券状态。
 - 预览订单时将用户选择的 `claimId` 传给 `voucherClaimId`，最终抵扣以预览结果为准。
 
+## 默认收货地址
+
+1. 登录后可用 `listAddresses` 查询本人地址，默认地址排在最前，最多保存 5 条。
+2. 首次提供的收货地址会在 `previewOrder` 成功后自动保存为默认地址，无需重复调用保存工具；没有默认地址且未传 `receiver` 时，按 `DEFAULT_ADDRESS_REQUIRED` 提示向客户询问姓名、手机号、省、市、区和详细地址。
+3. 后续订单若客户未要求更改地址，调用 `previewOrder` 时省略 `receiver`，直接使用默认地址。
+4. 每次预览都必须向客户展示返回的 `shippingNotice`，并按 `shippingAddress` 告知完整收货人、手机号和具体地址。使用默认地址时明确说：`本次订单将发往默认地址：……。如需更改，请告诉我新的收货地址。` 不得只展示掩码地址。
+5. 客户提供新地址但未要求更改默认时，把新地址传给本次 `previewOrder.receiver`，仅用于本次订单，不改变默认地址。
+6. 客户明确要求新增保存或更改默认地址时，用 `saveAddress`；已有地址可用 `setDefaultAddress`。`setDefault=true` 只能在客户明确授权后使用。删除地址必须使用 `deleteAddress`，且需先获得客户明确确认。
+
 ## 下单支付流程
 
-1. 确认产品 ID、数量和收货人姓名、手机号、省、市、区及详细地址。
-2. 调用 `previewOrder`：
+1. 确认产品 ID、数量，并按“默认收货地址”规则确定本次收货信息。
+2. 首次下单或客户提供了新地址时，调用 `previewOrder`：
 
 ```json
 {
@@ -122,7 +131,16 @@ metadata:
 }
 ```
 
-3. 向用户展示商品、数量、原价、商品优惠、运费、抵用券、最终应付金额和掩码收货信息。只有用户明确表示“确认下单”或同义确认后才继续。
+后续使用默认地址时省略 `receiver`：
+
+```json
+{
+  "items": [{"productId": "产品ID", "quantity": 1}],
+  "voucherClaimId": "可选的抵用券领取ID"
+}
+```
+
+3. 向用户展示商品、数量、原价、商品优惠、运费、抵用券、最终应付金额，以及 `shippingNotice` 和 `shippingAddress` 中的完整收货信息。只有用户明确表示“确认下单”或同义确认后才继续。
 4. 使用本次 `previewToken` 调用 `createOrder`，不得重新组装价格。
 5. 返回订单号、金额和支付状态。若 `payment` 存在：
    - 用 Markdown 图片展示 `payment.qrCodeUrl`。
@@ -151,7 +169,11 @@ metadata:
 | `listVouchers` | 查询当前可领抵用券 |
 | `claimVoucher` | 领取指定抵用券 |
 | `listMyVouchers` | 查询本人抵用券 |
-| `previewOrder` | 计算最终订单并获取一次性预览 Token |
+| `listAddresses` | 查询本人地址及默认地址 |
+| `saveAddress` | 保存地址，首条自动设为默认 |
+| `setDefaultAddress` | 将已保存地址设为默认 |
+| `deleteAddress` | 删除指定地址 |
+| `previewOrder` | 计算最终订单并获取一次性预览 Token；省略地址时使用默认地址 |
 | `createOrder` | 确认后创建待支付订单和支付参数 |
 | `queryOrder` | 查询本人订单 |
 | `cancelOrder` | 取消待支付订单 |

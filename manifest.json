@@ -1,7 +1,7 @@
 {
   "name": "zk-domestic-store",
   "displayName": "中科健康 AI 旗舰店",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "archiveName": "zk-domestic-store-skill",
   "sourceRepository": "https://github.com/zkhig/zk-domestic-store",
   "mcp": {
